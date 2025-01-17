@@ -1,11 +1,10 @@
-// Import the 'express' module
 import express from 'express';
 import userRoutes from './routes/userRoutes';
 import dotenv from 'dotenv'
 dotenv .config()
 // Create an Express application
 const app = express();
-console.log(process.env.DBCONNECTION)
+
 app.use(express.json());
 
 // Set the port number for the server
