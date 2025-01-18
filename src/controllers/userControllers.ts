@@ -31,7 +31,8 @@ class UserController {
             data:{
                 name:name,
                 email:email,
-                password:hashedPassword
+                password:hashedPassword,
+                isDeleted:false
             }
         })
 
@@ -54,18 +55,22 @@ class UserController {
   public async userLogin(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
-      const user = await pool.query(
-        `select email,password from users where email = $1`,
-        [email]
-      );
+      // const user = await pool.query(
+      //   `select email,password from users where email = $1`,
+      //   [email]
+      // );
+      const user = await prisma.users.findFirst({
+        where:{
+          email:email
+    }})
       let userpassword;
-      if (user.rows.length > 0) {
-        userpassword = user.rows[0].password;
+      if (user?.email) {
+        userpassword = user.password;
       } else {
-         res.status(404).json({ message: "user not found" });
+         res.status(404).json({ message: "Please Check Your Email User not Found" });
          return;
       }
-      if (await bcrypt.compare(password, user.rows[0].password)) {
+      if (await bcrypt.compare(password, userpassword)) {
          res.status(200).json({ message: "User Login Successfully" });
          return ;
       } else {
@@ -75,7 +80,7 @@ class UserController {
     } catch (error) {
       console.error(error);
        res.status(500).json({ message: error });
-       return ;
+       return;
     }
   }
 }

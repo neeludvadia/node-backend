@@ -1,12 +1,14 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes';
 import dotenv from 'dotenv'
+import path from 'node:path';
+path.dirname("src/assests/")
 dotenv .config()
 // Create an Express application
 const app = express();
 
 app.use(express.json());
-
+app.use(express.static("src/assests/"))
 // Set the port number for the server
 const port = 8000;
 

@@ -14,8 +14,28 @@ datasource db {
 }
 
 model users {
-  id Int @id @default(autoincrement())
-  name String 
-  email String
-  password String
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String
+  password  String
+  isDeleted Boolean
+}
+
+model category {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  isDeleted     Boolean         @default(false)
+
+  categoryItems categoryItems[]
+}
+
+model categoryItems {
+  id         Int      @id @default(autoincrement())
+  category   category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  name       String
+  imageName     String
+  imagePath     String
+  isDeleted Boolean @default(false)
 }
