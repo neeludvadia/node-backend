@@ -22,20 +22,38 @@ model users {
 }
 
 model category {
-  id            Int             @id @default(autoincrement())
-  title         String
-  description   String
-  isDeleted     Boolean         @default(false)
+  CategoryId          Int     @id @default(autoincrement())
+  title       String
+  description String
+  imageName String
+  imageUrl String
+  isDeleted   Boolean @default(false)
 
-  categoryItems categoryItems[]
+  Products Products[]
 }
 
-model categoryItems {
-  id         Int      @id @default(autoincrement())
-  category   category @relation(fields: [categoryId], references: [id])
+model Products {
+  ProductId         Int      @id @default(autoincrement())
+  category   category @relation(fields: [categoryId], references: [CategoryId])
   categoryId Int
+  ProductType ProductType @relation(fields: [ProductTypeId],references: [ProductTypeId])
+  ProductTypeId  Int
   name       String
-  imageName     String
-  imagePath     String
-  isDeleted Boolean @default(false)
+  productInto String?
+  Description String?
+  ProductPrice Int?
+  DiscountPrice Int?
+  Stock Int?
+  ProductStatus String?
+  imageName  String
+  imageUrl  String
+  isDeleted  Boolean  @default(false)
+}
+
+model ProductType {
+  ProductTypeId Int @id @default(autoincrement())
+  Products Products[]
+  Type String
+  isDeleted Boolean
+  CreatedDate String
 }
