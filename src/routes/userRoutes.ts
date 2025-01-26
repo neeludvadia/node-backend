@@ -10,7 +10,7 @@ const categoriesController = new CategoriesController();
 
 userRoutes.post("/signup",userController.userRegister);
 userRoutes.post("/login",userController.userLogin);
-userRoutes.post("/products",productController.fetchProductsWithtypes);
+userRoutes.post("/products",productController.fetchProductsBytypes);
 userRoutes.get("/categories",categoriesController.getCategories)
 
 export default userRoutes;

@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class ProductController {
-  public async fetchProductsWithtypes( req: Request, res: Response,) {
+  public async fetchProductsBytypes( req: Request, res: Response,) {
     try {
       const { productType } = req.body;
 
