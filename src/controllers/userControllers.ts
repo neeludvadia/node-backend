@@ -55,10 +55,6 @@ class UserController {
   public async userLogin(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
-      // const user = await pool.query(
-      //   `select email,password from users where email = $1`,
-      //   [email]
-      // );
       const user = await prisma.users.findFirst({
         where:{
           email:email
@@ -71,6 +67,9 @@ class UserController {
          return;
       }
       if (await bcrypt.compare(password, userpassword)) {
+          req.session.email = user.email;
+          req.session.name = user.name;
+          req.session.userid = user.id;
          res.status(200).json({ message: "User Login Successfully" });
          return ;
       } else {
