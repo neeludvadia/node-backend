@@ -67,8 +67,10 @@ class ProductController {
         .json({message:"Product Not Found"});
         return
       }else{
+        const Images = fetchProduct?.imageUrl.split(';');
+        const updated_products = {...fetchProduct,imageUrl:Images}
         res.status(200)
-        .json({message:fetchProduct})
+        .json({message:updated_products})
         return
       }
 
