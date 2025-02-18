@@ -45,6 +45,39 @@ class ProductController {
       .json({error:error})
     }
   }
+
+  public async fetchProductsById(req:Request, res:Response){
+    try {
+      const  {Id}  = req.query;
+      if(!Id){
+        res.status(400)
+        .json({error:"please pass proper query params"})
+        return
+      }
+      const productId = Number(Id);
+
+      const fetchProduct = await prisma.products.findFirst({
+        where:{
+          ProductId:productId,
+          isDeleted:false
+        }
+      });
+      if(!fetchProduct){
+        res.status(404)
+        .json({message:"Product Not Found"});
+        return
+      }else{
+        res.status(200)
+        .json({message:fetchProduct})
+        return
+      }
+
+    } catch (error) {
+      res.status(500)
+      .json({error:error})
+      return
+    }
+  }
 }
 
 export default ProductController;

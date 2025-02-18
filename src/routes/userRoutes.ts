@@ -12,7 +12,9 @@ const authenticate = new Authenticate();
 
 userRoutes.post("/signup",userController.userRegister);
 userRoutes.post("/login",userController.userLogin);
-userRoutes.post("/products",authenticate.authenticate,productController.fetchProductsBytypes);
-userRoutes.get("/categories",authenticate.authenticate,categoriesController.getCategories)
+// userRoutes.use(authenticate.authenticate);
+userRoutes.post("/products",productController.fetchProductsBytypes);
+userRoutes.get("/productsId",productController.fetchProductsById);
+userRoutes.get("/categories",categoriesController.getCategories)
 
 export default userRoutes;
