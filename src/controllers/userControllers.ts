@@ -53,34 +53,35 @@ class UserController {
   }
 
   public async userLogin(req: Request, res: Response): Promise<void> {
-    try {
-      const { email, password } = req.body;
-      const user = await prisma.users.findFirst({
-        where:{
-          email:email
-    }})
-      let userpassword;
-      if (user?.email) {
-        userpassword = user.password;
-      } else {
-         res.status(404).json({ message: "Please Check Your Email User not Found" });
-         return;
-      }
-      if (await bcrypt.compare(password, userpassword)) {
-          req.session.email = user.email;
-          req.session.name = user.name;
-          req.session.userid = user.id;
-         res.status(200).json({ message: "User Login Successfully" });
-         return ;
-      } else {
-         res.status(401).json({ message: "password is incorrect" });
-         return;
-      }
-    } catch (error) {
-      console.error(error);
-       res.status(500).json({ message: error });
-       return;
-    }
+    console.log(await req.body)
+    // try {
+    //   const { email, password } = req.body;
+    //   const user = await prisma.users.findFirst({
+    //     where:{
+    //       email:email
+    // }})
+    //   let userpassword;
+    //   if (user?.email) {
+    //     userpassword = user.password;
+    //   } else {
+    //      res.status(404).json({ message: "Please Check Your Email User not Found" });
+    //      return;
+    //   }
+    //   if (await bcrypt.compare(password, userpassword)) {
+    //       req.session.email = user.email;
+    //       req.session.name = user.name;
+    //       req.session.userid = user.id;
+    //      res.status(200).json({ message: "User Login Successfully" });
+    //      return ;
+    //   } else {
+    //      res.status(401).json({ message: "password is incorrect" });
+    //      return;
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //    res.status(500).json({ message: error });
+    //    return;
+    // }
   }
 }
 

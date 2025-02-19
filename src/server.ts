@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import path from 'node:path';
 import cors from "cors";
 import Session from './middleware/session' 
+import clerkMiddleware from './middleware/clerkMIddleware'
 
 path.dirname("src/assests/")
 dotenv .config()
@@ -16,6 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static("src/assests/"))
 app.use(cors());
+app.use(clerkMiddleware())
 app.use(Session)
 
 // Set the port number for the server
