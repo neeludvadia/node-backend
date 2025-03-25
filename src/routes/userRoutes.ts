@@ -18,6 +18,7 @@ userRoutes.post("/login",userController.userLogin);
 // userRoutes.use(authenticate.authenticate);
 userRoutes.post("/products",productController.fetchProductsBytypes);
 userRoutes.get("/productsId",productController.fetchProductsById);
-userRoutes.get("/categories",categoriesController.getCategories)
+userRoutes.get("/categories",categoriesController.getCategories);
+userRoutes.get("/searchProducts",productController.fetchProductBySearch);
 
 export default userRoutes;

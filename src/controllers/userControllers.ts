@@ -53,7 +53,16 @@ class UserController {
   }
 
   public async userLogin(req: Request, res: Response): Promise<void> {
-    console.log(await req.body)
+    try {
+      
+      console.log(await req.body)
+      res.status(200)
+      .json({message:"login successful"})
+      return;
+    } catch (error) {
+      console.error(error);
+      return
+    }
     // try {
     //   const { email, password } = req.body;
     //   const user = await prisma.users.findFirst({

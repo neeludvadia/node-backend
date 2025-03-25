@@ -8,12 +8,23 @@ class ProductController {
       const { productType } = req.body;
 
       const products = await prisma.products.findMany({
-        where: {
+        include: {
+          category: {
+            select: {
+              title: true, // Equivalent to cat.title AS category
+            },
+          },
+          ProductType: {
+            select: {
+              Type: true, // Equivalent to prodtype."Type" AS productType
+            },
+          },
+        },where: {
           ProductTypeId: productType,
           isDeleted: false,
         },
         orderBy: {
-          name: "asc",
+          name: 'asc', // Equivalent to ORDER BY prod."name" ASC
         },
       });
       const updated_products = products.map((item,index)=>{
@@ -57,10 +68,26 @@ class ProductController {
       const productId = Number(Id);
 
       const fetchProduct = await prisma.products.findFirst({
-        where:{
+        include: {
+          category: {
+            select: {
+              title: true, // Equivalent to cat.title AS category
+            },
+          },
+          ProductType: {
+            select: {
+              Type: true, // Equivalent to prodtype."Type" AS productType
+            },
+          },
+        },where:{
           ProductId:productId,
           isDeleted:false
-        }
+        },
+        orderBy: {
+          name: 'asc', // Equivalent to ORDER BY prod."name" ASC
+        },
+
+
       });
       if(!fetchProduct){
         res.status(404)
@@ -68,7 +95,7 @@ class ProductController {
         return
       }else{
         const Images = fetchProduct?.imageUrl.split(';');
-        const updated_products = {...fetchProduct,imageUrl:Images}
+        const updated_products = {...fetchProduct,imageUrl:Images,category:fetchProduct?.category?.title,ProductType:fetchProduct.ProductType.Type}
         res.status(200)
         .json({message:updated_products})
         return
@@ -79,6 +106,70 @@ class ProductController {
       .json({error:error})
       return
     }
+  }
+
+  public async fetchProductBySearch(req:Request,res:Response):Promise<void>{
+    const {search}= req.query;
+    if(!search){
+      res.status(400)
+      .json({message:"please enter search param"})
+      return;
+    }
+    try {
+      const fetchProduct = await prisma.products.findMany({
+        include: {
+          category: {
+            select: {
+              title: true, 
+            },
+          },
+          ProductType: {
+            select: {
+              Type: true, 
+            },
+          },
+        },where:{
+          name:{
+            contains:search as string,
+            mode:"insensitive"
+          }
+        },
+        orderBy: {
+          name: 'asc', 
+        },
+
+      })
+
+      
+      if(fetchProduct?.length<=0){
+        res.status(404)
+        .json({message:"No Products found"})
+        return;
+      }
+      
+      const updated_fetch_product = await Promise.all(fetchProduct?.map((item,index)=>{
+        const NewImagesUrl = item?.imageUrl.split(';');
+        const updated_Values = {...item,
+          category:item.category.title,
+          ProductType:item.ProductType.Type,
+          imageUrl:NewImagesUrl
+        }
+        return (
+          updated_Values
+        )
+      })
+    )
+      res.status(200)
+      .json({message:updated_fetch_product})
+      return;
+      
+    } catch (error) {
+      console.error("error fetching products", error);
+      res.status(500)
+      .json({message:error})
+      return;
+    }
+
   }
 }
 
