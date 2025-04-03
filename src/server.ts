@@ -1,21 +1,27 @@
-// Import the 'express' module
 import express from 'express';
 import userRoutes from './routes/userRoutes';
 import dotenv from 'dotenv'
+import path from 'node:path';
+import cors from "cors";
+import Session from './middleware/session' 
+import clerkMiddleware from './middleware/clerkMIddleware'
+
+path.dirname("src/assests/")
 dotenv .config()
 // Create an Express application
 const app = express();
-console.log(process.env.DBCONNECTION)
+
+//if hosted with proxy (e.g.nginx)
+//app.set('trust proxy',1);
+
 app.use(express.json());
+app.use(express.static("src/assests/"))
+app.use(cors());
+app.use(clerkMiddleware())
+app.use(Session)
 
 // Set the port number for the server
 const port = 8000;
-
-// Define a route for the root path ('/')
-app.get('/', (req, res) => {
-  // Send a response to the client
-  res.send('Hello, TypeScript + Node.js + Express!');
-});
 
 app.use("/api",userRoutes);
 
