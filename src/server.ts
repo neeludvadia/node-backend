@@ -18,8 +18,8 @@ const app = express();
 app.use(express.json());
 app.use(express.static("src/assests/"))
 app.use(cors());
-app.use(clerkMiddleware())
-app.use(Session)
+// app.use(clerkMiddleware())
+// app.use(Session)
 
 
 // Set the port number for the server

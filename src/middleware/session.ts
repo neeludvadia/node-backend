@@ -1,7 +1,7 @@
 import session = require("express-session")
 import { RedisStore } from "connect-redis"
 import IORedis from "ioredis";
-
+import dotenv from 'dotenv'
 declare module 'express-session' {
   interface SessionData {
     clientId?: string;
@@ -11,9 +11,11 @@ declare module 'express-session' {
   }
 }
 
+dotenv.config();
+
 const redisClient = new IORedis(process.env.REDIS_URL || "redis://127.0.0.1:6379");
 if(redisClient){
-  console.log("redis server connected");
+  console.log(`redis server connected on: ${process.env.REDIS_URL}`);
 }
 
 export default session({
