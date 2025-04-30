@@ -48,6 +48,7 @@ model Products {
   imageName  String
   imageUrl  String
   isDeleted  Boolean  @default(false)
+  productOrder ProductOrder[]
 }
 
 model ProductType {
@@ -56,4 +57,44 @@ model ProductType {
   Type String
   isDeleted Boolean
   CreatedDate String
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  orderNumber String
+  invoice Invoice? @relation(fields: [invoiceId],references: [invoiceId])
+  invoiceId String? @unique
+  stripeCustomerId String
+  clerkUserId String
+  customerName String
+  email String
+  stripeCheckoutSessionId String
+  stripePaymentIntentId String
+  products ProductOrder[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  currency String
+  amountDiscount Int
+  totalPrice Int
+  status String
+}
+
+model Invoice {
+  id Int @id @default(autoincrement())
+  invoiceId String? @unique
+  number String?
+  hostedInvoiceUrl String?
+  order Order? @relation()
+}
+
+
+model ProductOrder {
+  id Int @id @default(autoincrement())
+  productId Int
+  name String
+  price Float
+  quantity Int
+  order Order @relation(fields:[orderId], references: [id])
+  orderId Int
+  product Products @relation(fields: [productId], references: [ProductId])
 }
